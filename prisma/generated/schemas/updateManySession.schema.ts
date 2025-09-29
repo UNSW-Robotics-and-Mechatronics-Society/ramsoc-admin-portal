@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { SessionUpdateManyMutationInputObjectSchema as SessionUpdateManyMutationInputObjectSchema } from './objects/SessionUpdateManyMutationInput.schema';

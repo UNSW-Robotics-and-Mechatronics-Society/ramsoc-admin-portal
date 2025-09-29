@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { PostWhereInputObjectSchema as PostWhereInputObjectSchema } from './objects/PostWhereInput.schema';

@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 export * from './enums/TransactionIsolationLevel.schema'
 export * from './enums/AccountScalarFieldEnum.schema'
 export * from './enums/RelationLoadStrategy.schema'

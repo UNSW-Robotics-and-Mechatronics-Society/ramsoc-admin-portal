@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { UserSelectObjectSchema as UserSelectObjectSchema } from './objects/UserSelect.schema';

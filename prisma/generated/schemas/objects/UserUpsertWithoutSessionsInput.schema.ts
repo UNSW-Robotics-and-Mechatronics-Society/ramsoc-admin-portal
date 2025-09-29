@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { UserUpdateWithoutSessionsInputObjectSchema as UserUpdateWithoutSessionsInputObjectSchema } from './UserUpdateWithoutSessionsInput.schema';

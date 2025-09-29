@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { z } from 'zod';
 export const AccountCreateResultSchema = z.object({
   id: z.string(),

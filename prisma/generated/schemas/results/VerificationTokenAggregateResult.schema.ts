@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { z } from 'zod';
 export const VerificationTokenAggregateResultSchema = z.object({  _count: z.object({
     identifier: z.number(),

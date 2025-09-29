@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { PostIncludeObjectSchema as PostIncludeObjectSchema } from './objects/PostInclude.schema';

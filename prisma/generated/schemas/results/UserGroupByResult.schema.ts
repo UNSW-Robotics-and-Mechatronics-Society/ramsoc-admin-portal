@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { z } from 'zod';
 export const UserGroupByResultSchema = z.array(z.object({
   id: z.string(),

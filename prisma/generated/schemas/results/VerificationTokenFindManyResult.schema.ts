@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { z } from 'zod';
 export const VerificationTokenFindManyResultSchema = z.object({
   data: z.array(z.object({

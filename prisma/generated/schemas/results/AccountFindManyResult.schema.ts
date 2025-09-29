@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { z } from 'zod';
 export const AccountFindManyResultSchema = z.object({
   data: z.array(z.object({

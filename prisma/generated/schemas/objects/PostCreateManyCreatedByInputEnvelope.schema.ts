@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { CreatedByPostCreateManyCreatedByInputObjectSchema as PostCreateManyCreatedByInputObjectSchema } from './PostCreateManyCreatedByInput.schema'
