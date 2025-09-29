@@ -47,3 +47,6 @@ yarn-error.log*
 
 # open-nextjs files
 .open-next
+
+# wrangler files
+.wrangler
