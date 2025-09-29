@@ -16,6 +16,7 @@
     "postinstall": "prisma generate && node ./scripts/patch-generated.ts",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "lint:ci": "eslint . --ext .js,.jsx,.ts,.tsx",
     "preview": "next build && next start",
     "start": "next start",
     "typecheck": "tsc --noEmit",
