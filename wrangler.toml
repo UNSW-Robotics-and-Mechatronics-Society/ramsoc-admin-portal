@@ -1,0 +1,13 @@
+main = ".open-next/worker.js"
+name = "ramsoc-admin-portal"
+compatibility_date = "2025-03-25"
+compatibility_flags = ["nodejs_compat"]
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+[[routes]]
+pattern = "admin.ramsocunsw.org"
+custom_domain = true
+[[routes]]
+pattern = "www.admin.ramsocunsw.org"
+custom_domain = true
