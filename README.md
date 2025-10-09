@@ -1,29 +1,85 @@
-# Create T3 App
+# 🦾 RAMSoc Admin Portal
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A unified platform for **RAMSoc** to manage members, events, and attendance - built for reliability, scalability, and future multi-tenant support.
 
-## What's next? How do I make an app with this?
+---
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## ⚙️ Technology Stack
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+| Layer         | Tech                                                         |
+| ------------- | ------------------------------------------------------------ |
+| **Language**  | TypeScript                                                   |
+| **Framework** | [Next.js](https://nextjs.org) (App Router, React)            |
+| **UI**        | [MUI](https://mui.com/material-ui/getting-started/)          |
+| **Auth**      | [NextAuth.js](https://next-auth.js.org) — Google SSO + Email |
+| **Database**  | [NeonDB](https://neon.tech/) (PostgreSQL)                    |
+| **ORM**       | [Prisma](https://www.prisma.io/)                             |
+| **Hosting**   | [Vercel](https://vercel.com/)                                |
+| **API**       | Next.js Route Handlers (`/api/...`)                          |
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+> Stack provided by [create-t3-app](https://create.t3.gg/).
 
-## Learn More
+---
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## 🧠 Setup
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### 🧾 Prerequisites
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [Node.js 20+](https://nodejs.org/en/download)
+- [pnpm](https://pnpm.io/installation)
+- [Vercel CLI](https://vercel.com/docs/cli)
 
-## How do I deploy this?
+### 1️⃣ Clone Repositories
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```bash
+git clone https://github.com/UNSW-Robotics-and-Mechatronics-Society/ramsoc-admin-portal.git
+
+# OR SSH (preferred for contributors)
+# git clone git@github.com:UNSW-Robotics-and-Mechatronics-Society/ramsoc-admin-portal.git
+
+cd ramsoc-admin-portal
+```
+
+### 2️⃣ Pull Environment Variables
+
+Pull secrets from Vercel (no manual copying required):
+
+```bash
+vercel login # login via RAMSoc Google account
+vercel link  # link repo to the correct Vercel project
+vercel env pull .env.local
+```
+
+‼️ The `.env.local` file should now be populated with environment variables. However, you must remove `AUTH_REDIRECT_PROXY_URL` for local development since it points to the development domain. After removal, it should look like:
+
+```env
+AUTH_GOOGLE_ID=...
+AUTH_GOOGLE_SECRET=...
+AUTH_SECRET=your_secret_key
+DATABASE_URL=postgresql://...
+```
+
+### 3️⃣ Install Dependencies
+
+```bash
+pnpm install
+```
+
+### 4️⃣ Run Development Server
+
+```bash
+pnpm dev
+```
+
+The app should now be running at [http://localhost:3000](http://localhost:3000).
+
+If everything is set up correctly, you should be able to log in using your Google account.
+
+## 👥 Contributors
+
+See [CONTRIBUTORS.md](./CONTRIBUTORS.md) for current maintainers and members.
+
+---
+
+> Built with ❤️ by the UNSW RAMSoc IT team.
