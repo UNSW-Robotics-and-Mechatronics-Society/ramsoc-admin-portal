@@ -25,7 +25,7 @@ Desktop:
 
 ## Checklist
 
-- [ ] I had tested the change locally (running `npm run preview`)
+- [ ] I had tested the change locally (running `pnpm run preview`)
 - [ ] Reviewed changes in both mobile and desktop by device
 - [ ] My code changes follow the Code Style Guideline
 - [ ] My PR title follows conventional change log standards
