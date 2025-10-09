@@ -44,9 +44,3 @@ yarn-error.log*
 
 # idea files
 .idea
-
-# open-nextjs files
-.open-next
-
-# wrangler files
-.wrangler
