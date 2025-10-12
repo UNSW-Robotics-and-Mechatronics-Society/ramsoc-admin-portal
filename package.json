@@ -6,7 +6,8 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "db:migrate": "turbo run db:migrate"
   },
   "devDependencies": {
     "eslint": "^9.37.0",
