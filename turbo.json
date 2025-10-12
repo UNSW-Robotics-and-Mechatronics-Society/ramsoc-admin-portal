@@ -7,28 +7,13 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "dist/**"],
-      "env": ["NODE_ENV"]
-    },
-    "build#admin": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"],
       "env": [
-        "AUTH_SECRET",
-        "AUTH_GOOGLE_ID",
-        "AUTH_GOOGLE_SECRET",
-        "DATABASE_URL",
-        "NODE_ENV"
-      ]
-    },
-    "build#client": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"],
-      "env": [
+        "NODE_ENV",
         "AUTH_SECRET",
         "AUTH_GOOGLE_ID",
         "AUTH_GOOGLE_SECRET",
         "NEXT_PUBLIC_API_BASE",
-        "NODE_ENV"
+        "DATABASE_URL"
       ]
     },
     "typecheck": { "dependsOn": ["^typecheck"] },
