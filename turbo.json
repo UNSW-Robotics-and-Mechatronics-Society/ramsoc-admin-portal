@@ -1,8 +1,35 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["tsconfig.base.json", "eslint.config.mjs"],
   "tasks": {
     "dev": { "cache": false, "persistent": true },
-    "build": { "dependsOn": ["^build"], "outputs": [".next/**", "dist/**"] },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "dist/**"],
+      "env": ["NODE_ENV"]
+    },
+    "build#admin": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "AUTH_SECRET",
+        "AUTH_GOOGLE_ID",
+        "AUTH_GOOGLE_SECRET",
+        "DATABASE_URL",
+        "NODE_ENV"
+      ]
+    },
+    "build#client": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "AUTH_SECRET",
+        "AUTH_GOOGLE_ID",
+        "AUTH_GOOGLE_SECRET",
+        "NEXT_PUBLIC_API_BASE",
+        "NODE_ENV"
+      ]
+    },
     "typecheck": { "dependsOn": ["^typecheck"] },
     "lint": {}
   }

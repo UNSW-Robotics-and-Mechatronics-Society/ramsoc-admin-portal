@@ -13,10 +13,10 @@
     "prisma:deploy": "prisma migrate deploy"
   },
   "dependencies": {
-    "@ramsoc/types": "workspace:*",
-    "@ramsoc/utils": "workspace:*",
     "@auth/prisma-adapter": "^2.7.2",
     "@prisma/client": "^6.5.0",
+    "@ramsoc/types": "workspace:*",
+    "@ramsoc/utils": "workspace:*",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.69.0",
     "@trpc/client": "^11.0.0",
@@ -41,6 +41,7 @@
     "dotenv": "^17.2.2",
     "eslint": "^9.23.0",
     "eslint-config-next": "^15.2.3",
+    "eslint-plugin-react-hooks": "^7.0.0",
     "eslint-plugin-tailwindcss": "4.0.0-beta.0",
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
