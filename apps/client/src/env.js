@@ -13,6 +13,7 @@ export const env = createEnv({
         : z.string().optional(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
+    NEXT_PUBLIC_API_BASE: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -24,6 +25,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
+    NEXT_PUBLIC_API_BASE: z.string().url(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
