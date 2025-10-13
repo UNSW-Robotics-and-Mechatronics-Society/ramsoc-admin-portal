@@ -29,6 +29,6 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Run Prisma migrate
-        run: pnpm db:migrate
+        run: pnpm -F @ramsoc/admin prisma:deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}

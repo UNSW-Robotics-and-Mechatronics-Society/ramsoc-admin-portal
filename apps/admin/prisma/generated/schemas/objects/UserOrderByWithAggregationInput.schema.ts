@@ -15,6 +15,8 @@ const makeSchema = () => z.object({
   email: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   emailVerified: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   image: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  createDate: SortOrderSchema.optional(),
+  updateDate: SortOrderSchema.optional(),
   _count: z.lazy(() => UserCountOrderByAggregateInputObjectSchema).optional(),
   _max: z.lazy(() => UserMaxOrderByAggregateInputObjectSchema).optional(),
   _min: z.lazy(() => UserMinOrderByAggregateInputObjectSchema).optional()

@@ -10,9 +10,12 @@ export const UserResultSchema = z.object({
     email: z.string().nullable(),
     emailVerified: z.date().nullable(),
     image: z.string().nullable(),
+    createDate: z.date(),
+    updateDate: z.date(),
     accounts: z.array(z.unknown()),
     sessions: z.array(z.unknown()),
-    posts: z.array(z.unknown())
+    profile: z.unknown().nullable(),
+    tenantMembers: z.array(z.unknown())
 }).strict();
 
 export type UserResultType = z.infer<typeof UserResultSchema>;
