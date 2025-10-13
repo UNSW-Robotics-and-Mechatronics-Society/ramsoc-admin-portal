@@ -11,6 +11,8 @@ const makeSchema = () => z.object({
   email: z.literal(true).optional(),
   emailVerified: z.literal(true).optional(),
   image: z.literal(true).optional(),
+  createDate: z.literal(true).optional(),
+  updateDate: z.literal(true).optional(),
   _all: z.literal(true).optional()
 }).strict();
 export const UserCountAggregateInputObjectSchema: z.ZodType<Prisma.UserCountAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.UserCountAggregateInputType>;
