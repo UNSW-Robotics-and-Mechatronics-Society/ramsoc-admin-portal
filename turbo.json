@@ -18,15 +18,6 @@
       ]
     },
     "typecheck": { "dependsOn": ["^typecheck"] },
-    "lint": {},
-    "@ramsoc/admin#db:migrate": {
-      "inputs": [
-        ".env*",
-        "prisma/**",
-        "apps/admin/prisma/**",
-        "apps/admin/package.json"
-      ],
-      "env": ["DATABASE_URL"]
-    }
+    "lint": {}
   }
 }
