@@ -17,5 +17,5 @@ export const openApiDocument = generateOpenApiDocument(appRouter, {
       ? "https://admin.ramsocunsw.org/api"
       : "http://localhost:3000/api",
   // TODO: add docsUrl
-  tags: ["post"],
+  tags: ["test"],
 });
