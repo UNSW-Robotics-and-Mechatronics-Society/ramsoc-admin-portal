@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 /**
  * Result Variant Schemas
  * Auto-generated - do not edit manually

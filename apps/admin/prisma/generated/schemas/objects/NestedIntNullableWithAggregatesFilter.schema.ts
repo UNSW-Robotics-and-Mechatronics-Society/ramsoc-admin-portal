@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { NestedIntNullableFilterObjectSchema as NestedIntNullableFilterObjectSchema } from './NestedIntNullableFilter.schema';

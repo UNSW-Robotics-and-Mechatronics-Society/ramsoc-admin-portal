@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 export { AccountFindUniqueResultSchema } from './AccountFindUniqueResult.schema';
 export { AccountFindFirstResultSchema } from './AccountFindFirstResult.schema';
 export { AccountFindManyResultSchema } from './AccountFindManyResult.schema';
