@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import type { Prisma } from '@prisma/client';
 import * as z from 'zod';
 import { PostSelectObjectSchema as PostSelectObjectSchema } from './objects/PostSelect.schema';

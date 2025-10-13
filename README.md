@@ -40,7 +40,62 @@ ramsoc-platform/
 Each app is deployed independently on Vercel:
 
 - Admin: [admin.ramsocunsw.org](https://admin.ramsocunsw.org) (includes API routes + Prisma)
+- API: [api.ramsocunsw.org](https://api.ramsocunsw.org) (public API for Client + future tenants)
 - Client: [app.ramsocunsw.org](https://app.ramsocunsw.org)
+
+## 🌐 API Overview
+
+The RAMSoc Platform API currently ships inside the Admin app (apps/admin) and is consumed by both:
+
+- Admin Portal (internal UI) — calls tRPC directly
+- Client App — calls the API over REST (via the OpenAPI bridge) or tRPC (if desired)
+
+It exposes:
+
+- tRPC at `/api/trpc`
+- REST (OpenAPI-bridged) routes under `/api/*` via trpc-to-openapi
+
+### Architecture
+
+The API is built on tRPC with optional OpenAPI exposure (trpc-to-openapi) — allowing both type-safe frontend calls and traditional REST-style requests.
+
+```mermaid
+flowchart LR
+    subgraph AdminApp ["Admin App (Next.js)"]
+      B["API Layer (tRPC routers + trpc-to-openapi)"]
+      B -->|Prisma| C[(Neon Postgres)]
+      B --> E["NextAuth (Google OAuth; session cookie)"]
+      D["Admin Portal UI (Next.js)"] -->|tRPC| B
+    end
+
+    A["Client App (Next.js) / External App"] -->|"REST (OpenAPI) or tRPC"| B
+```
+
+Key points:
+
+- Implementation: Next.js Route Handlers under `/api/**`
+- tRPC endpoint: `/api/trpc`
+- REST endpoints: `/api/<your-openapi-paths>` (bridged from tRPC via trpc-to-openapi)
+- Validation: Zod
+- Serialization: SuperJSON
+- Auth: NextAuth (Google OAuth) → session cookie for protected procedures
+- Docs: OpenAPI JSON served from the Admin app (see below)
+
+> Note: In future, the API may be split into its own standalone app for better separation of concerns and scalability.
+
+### OpenAPI Support
+
+An OpenAPI schema is automatically generated from tRPC routers and served at:
+
+```txt
+/api/openapi.json
+```
+
+You can preview it using Swagger UI for documentation:
+• Swagger UI (local): <http://localhost:3000/api/docs>
+• Production (future): <https://api.ramsocunsw.org/docs>
+
+When the public API is deployed separately, all frontend apps should read from `NEXT_PUBLIC_API_BASE=https://api.ramsocunsw.org`.
 
 ## 🧠 Setup
 

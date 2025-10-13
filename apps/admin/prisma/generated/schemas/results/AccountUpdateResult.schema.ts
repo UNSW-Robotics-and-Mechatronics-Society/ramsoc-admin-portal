@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import * as z from 'zod';
 export const AccountUpdateResultSchema = z.nullable(z.object({
   id: z.string(),

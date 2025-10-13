@@ -17,6 +17,7 @@
   },
   "packageManager": "pnpm@10.15.0",
   "dependencies": {
+    "trpc-to-openapi": "^3.1.0",
     "typescript": "^5.9.3"
   }
 }

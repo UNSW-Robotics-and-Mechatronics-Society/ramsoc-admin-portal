@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 /**
  * Object Schemas Index
  * Auto-generated - do not edit manually

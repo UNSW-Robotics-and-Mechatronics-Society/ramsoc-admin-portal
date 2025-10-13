@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 /**
  * Schema Variants Index
  * Auto-generated - do not edit manually

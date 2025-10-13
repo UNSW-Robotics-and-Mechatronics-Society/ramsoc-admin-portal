@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import * as z from 'zod';
 export const AccountUpsertResultSchema = z.object({
   id: z.string(),
