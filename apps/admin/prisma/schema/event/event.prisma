@@ -1,0 +1,25 @@
+model Event {
+    id       String @id @default(cuid())
+    tenantId String
+
+    title         String
+    slug          String  @unique
+    coverImageUrl String?
+    siteUrl       String?
+    description   String?
+
+    visibility Visibility @default(PUBLIC)
+
+    createdById String
+    updatedById String?
+
+    createDate DateTime @default(now())
+    updateDate DateTime @updatedAt
+
+    tenant     Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+    createdBy  TenantMember  @relation("EventCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+    updatedBy  TenantMember? @relation("EventUpdatedBy", fields: [updatedById], references: [id], onDelete: Cascade)
+    activities Activity[]
+
+    @@index([tenantId])
+}

@@ -1,0 +1,16 @@
+model Tenant {
+    id          String  @id @default(cuid())
+    name        String  @unique
+    logo        String? @default("") // URL to logo image
+    siteUrl     String? @default("") // URL to tenant's main website
+    description String?
+
+    createDate DateTime @default(now())
+    updateDate DateTime @default(now()) @updatedAt
+
+    tenantMembers           TenantMember[]
+    events                  Event[]
+    activities              Activity[]
+    activitySessions        ActivitySession[]
+    activitySessionCheckIns ActivitySessionCheckIn[]
+}

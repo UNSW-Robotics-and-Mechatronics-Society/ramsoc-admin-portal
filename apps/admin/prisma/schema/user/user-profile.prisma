@@ -1,0 +1,16 @@
+model UserProfile {
+    userId        String  @id @unique
+    firstName     String?
+    lastName      String?
+    preferredName String? // aka nickname
+    image         String?
+    gender        String?
+    university    String?
+    studyLevel    String?
+    zID           String?
+
+    createDate DateTime @default(now())
+    updateDate DateTime @updatedAt
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

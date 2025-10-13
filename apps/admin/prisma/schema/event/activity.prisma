@@ -1,0 +1,87 @@
+enum SessionCodeType {
+    NONE // no code required
+    STATIC // fixed shared code (e.g., “CODE-2025”)
+    GENERATED // dynamically generated one-time code
+}
+
+model Activity {
+    id          String  @id @default(cuid())
+    tenantId    String
+    eventId     String
+    title       String
+    description String?
+
+    visibility Visibility @default(PUBLIC)
+
+    createDate DateTime @default(now())
+    updateDate DateTime @updatedAt
+
+    createdById String
+    updatedById String?
+
+    tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+    event            Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+    createdBy        TenantMember      @relation("ActivityCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+    updatedBy        TenantMember?     @relation("ActivityUpdatedBy", fields: [updatedById], references: [id], onDelete: Cascade)
+    types            ActivityType[]
+    activitySessions ActivitySession[]
+}
+
+model ActivityType {
+    id          String  @id @default(cuid())
+    name        String  @unique
+    description String?
+
+    activities Activity[]
+}
+
+model ActivitySession {
+    id         String @id @default(cuid())
+    tenantId   String
+    activityId String
+
+    visibility Visibility @default(PUBLIC)
+
+    startTime DateTime
+    endTime   DateTime
+
+    location String?
+    capacity Int?
+
+    codeType      SessionCodeType @default(NONE)
+    code          String?
+    codeValidFrom DateTime?
+    codeValidTo   DateTime?
+
+    createDate DateTime @default(now())
+    updateDate DateTime @updatedAt
+
+    createdById String
+    updatedById String?
+
+    allowSelfCheckIn Boolean @default(false)
+
+    activity  Activity                 @relation(fields: [activityId], references: [id], onDelete: Cascade)
+    tenant    Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+    createdBy TenantMember             @relation("ActivitySessionCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+    updatedBy TenantMember?            @relation("ActivitySessionUpdatedBy", fields: [updatedById], references: [id], onDelete: Cascade)
+    checkIns  ActivitySessionCheckIn[]
+
+    @@index([tenantId, activityId])
+}
+
+model ActivitySessionCheckIn {
+    id                String @id @default(cuid())
+    tenantId          String
+    activitySessionId String
+    memberId          String
+
+    checkInTime DateTime @default(now())
+
+    tenant          Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+    activitySession ActivitySession @relation(fields: [activitySessionId], references: [id], onDelete: Cascade)
+    member          TenantMember    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+    @@unique([tenantId, activitySessionId, memberId])
+    @@unique([tenantId, activitySessionId, checkInTime])
+}

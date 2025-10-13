@@ -4,7 +4,12 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+
+  createDate DateTime @default(now())
+  updateDate DateTime @updatedAt
+
   accounts      Account[]
   sessions      Session[]
-  posts         Post[]
+  profile       UserProfile?
+  tenantMembers TenantMember[]
 }
