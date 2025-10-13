@@ -43,8 +43,6 @@ Each app is deployed independently on Vercel:
 - API: [api.ramsocunsw.org](https://api.ramsocunsw.org) (public API for Client + future tenants)
 - Client: [app.ramsocunsw.org](https://app.ramsocunsw.org)
 
-Here’s an updated README.md section you can append under your current one, describing the API layer clearly for both internal devs and external collaborators (e.g. DevSoc, future tenants).
-
 ## 🌐 API Overview
 
 The RAMSoc Platform API currently ships inside the Admin app (apps/admin) and is consumed by both:
