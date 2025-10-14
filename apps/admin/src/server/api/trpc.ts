@@ -1,5 +1,5 @@
 /**
- * YOU PROBABLY DON'T NEED TO EDIT THIS FILE, UNLESS:
+ * YOU LIKELY DON'T NEED TO EDIT THIS FILE, UNLESS:
  * 1. You want to modify request context (see Part 1).
  * 2. You want to create a new middleware or type of procedure (see Part 3).
  *
@@ -10,9 +10,10 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import type { OpenApiMeta } from "trpc-to-openapi";
-import { ZodError } from "zod";
+import z, { ZodError } from "zod";
 
 import { auth } from "@/server/auth";
+import { AuthorizationService, Permission } from "@/server/auth/permissions";
 import { db } from "@/server/db";
 
 /**
@@ -30,12 +31,69 @@ import { db } from "@/server/db";
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await auth();
 
+  await setRLSContext(session?.user?.id ?? null);
+
   return {
     db,
     session,
+    auth: new AuthorizationService(session),
     ...opts,
   };
 };
+
+/**
+ * Set the current user context for RLS
+ */
+export async function setRLSContext(userId: string | null) {
+  try {
+    if (userId) {
+      const sanitizedUserId = userId.replace(/'/g, "''");
+      await db.$executeRawUnsafe(
+        `SET app.current_user_id = '${sanitizedUserId}'`
+      );
+    } else {
+      // Clear the context
+      await db.$executeRawUnsafe(`SET app.current_user_id = ''`);
+    }
+  } catch (error) {
+    // If RLS is not set up, just continue without setting context
+    console.warn(
+      "RLS context setting failed (this is expected if RLS is not yet configured):",
+      error
+    );
+  }
+}
+
+/**
+ * Reset RLS context (useful for system operations)
+ */
+export async function resetRLSContext() {
+  await db.$executeRawUnsafe(`RESET app.current_user_id`);
+}
+
+/**
+ * Execute a function with system privileges (bypasses RLS)
+ */
+export async function withSystemPrivileges<T>(
+  fn: () => Promise<T>
+): Promise<T> {
+  const currentUserId = await db.$queryRaw<[{ current_setting: string }]>`
+    SELECT current_setting('app.current_user_id', true) as current_setting
+  `;
+
+  try {
+    await resetRLSContext();
+    return await fn();
+  } finally {
+    // Restore previous context
+    if (
+      currentUserId[0]?.current_setting &&
+      currentUserId[0].current_setting !== ""
+    ) {
+      await setRLSContext(currentUserId[0].current_setting);
+    }
+  }
+}
 
 /**
  * 2. INITIALIZATION
@@ -135,3 +193,102 @@ export const protectedProcedure = t.procedure
       },
     });
   });
+
+/**
+ * Tenant-aware procedure factory
+ *
+ * Creates procedures that require a tenantId and validate tenant access.
+ */
+export const tenantProcedure = protectedProcedure
+  .input(
+    z.object({
+      tenantId: z.cuid(),
+    })
+  )
+  .use(async ({ ctx, next, input }) => {
+    const tenantId = input?.tenantId;
+    if (!tenantId || typeof tenantId !== "string") {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "tenantId is required",
+      });
+    }
+
+    // Verify user has access to this tenant
+    const isMember = await ctx.auth.isMember(tenantId);
+    if (!isMember) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Access denied to this tenant",
+      });
+    }
+
+    return next({
+      ctx: {
+        ...ctx,
+        tenantId,
+      },
+    });
+  });
+
+/**
+ * Admin procedure factory
+ *
+ * Creates procedures that require admin role in a specific tenant.
+ */
+export const tenantAdminProcedure = protectedProcedure
+  .input(
+    z.object({
+      tenantId: z.cuid(),
+    })
+  )
+  .use(async ({ ctx, next, input }) => {
+    const tenantId = input?.tenantId;
+    if (!tenantId || typeof tenantId !== "string") {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "tenantId is required",
+      });
+    }
+
+    await ctx.auth.requireAdmin(tenantId);
+
+    return next({
+      ctx: {
+        ...ctx,
+        tenantId,
+      },
+    });
+  });
+
+/**
+ * Permission-based procedure factory
+ *
+ * Creates procedures that require specific permissions in a tenant.
+ */
+export const createPermissionProcedure = (permissions: Permission[]) => {
+  return protectedProcedure
+    .input(
+      z.object({
+        tenantId: z.cuid(),
+      })
+    )
+    .use(async ({ ctx, next, input }) => {
+      const tenantId = input?.tenantId;
+      if (!tenantId || typeof tenantId !== "string") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "tenantId is required",
+        });
+      }
+
+      await ctx.auth.requirePermissions(tenantId, permissions);
+
+      return next({
+        ctx: {
+          ...ctx,
+          tenantId,
+        },
+      });
+    });
+};
