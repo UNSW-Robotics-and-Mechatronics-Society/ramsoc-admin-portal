@@ -1,3 +1,13 @@
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_roles WHERE rolname = 'authenticated'
+  ) THEN
+    CREATE ROLE authenticated;
+  END IF;
+END
+$$;
+
 -- Create auth schema if it doesn't exist (or we can use public schema)
 CREATE SCHEMA IF NOT EXISTS auth;
 
