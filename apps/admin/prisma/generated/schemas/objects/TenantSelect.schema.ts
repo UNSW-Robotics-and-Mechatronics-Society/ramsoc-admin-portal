@@ -13,6 +13,7 @@ import { TenantCountOutputTypeArgsObjectSchema as TenantCountOutputTypeArgsObjec
 const makeSchema = () => z.object({
   id: z.boolean().optional(),
   name: z.boolean().optional(),
+  slug: z.boolean().optional(),
   logo: z.boolean().optional(),
   siteUrl: z.boolean().optional(),
   description: z.boolean().optional(),

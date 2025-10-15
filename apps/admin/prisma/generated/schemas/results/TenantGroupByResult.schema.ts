@@ -5,6 +5,7 @@ import * as z from 'zod';
 export const TenantGroupByResultSchema = z.array(z.object({
   id: z.string(),
   name: z.string(),
+  slug: z.string(),
   logo: z.string(),
   siteUrl: z.string(),
   description: z.string(),
@@ -13,6 +14,7 @@ export const TenantGroupByResultSchema = z.array(z.object({
   _count: z.object({
     id: z.number(),
     name: z.number(),
+    slug: z.number(),
     logo: z.number(),
     siteUrl: z.number(),
     description: z.number(),
@@ -27,6 +29,7 @@ export const TenantGroupByResultSchema = z.array(z.object({
   _min: z.object({
     id: z.string().nullable(),
     name: z.string().nullable(),
+    slug: z.string().nullable(),
     logo: z.string().nullable(),
     siteUrl: z.string().nullable(),
     description: z.string().nullable(),
@@ -36,6 +39,7 @@ export const TenantGroupByResultSchema = z.array(z.object({
   _max: z.object({
     id: z.string().nullable(),
     name: z.string().nullable(),
+    slug: z.string().nullable(),
     logo: z.string().nullable(),
     siteUrl: z.string().nullable(),
     description: z.string().nullable(),

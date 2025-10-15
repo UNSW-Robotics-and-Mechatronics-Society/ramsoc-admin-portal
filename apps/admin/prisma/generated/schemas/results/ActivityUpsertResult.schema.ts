@@ -8,6 +8,8 @@ export const ActivityUpsertResultSchema = z.object({
   eventId: z.string(),
   title: z.string(),
   description: z.string().optional(),
+  slug: z.string(),
+  coverImageUrl: z.string().optional(),
   visibility: z.unknown(),
   createDate: z.date(),
   updateDate: z.date(),

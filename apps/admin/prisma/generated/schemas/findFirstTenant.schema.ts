@@ -15,6 +15,7 @@ import { TenantScalarFieldEnumSchema } from './enums/TenantScalarFieldEnum.schem
 export const TenantFindFirstSelectSchema: z.ZodType<Prisma.TenantSelect> = z.object({
     id: z.boolean().optional(),
     name: z.boolean().optional(),
+    slug: z.boolean().optional(),
     logo: z.boolean().optional(),
     siteUrl: z.boolean().optional(),
     description: z.boolean().optional(),
@@ -31,6 +32,7 @@ export const TenantFindFirstSelectSchema: z.ZodType<Prisma.TenantSelect> = z.obj
 export const TenantFindFirstSelectZodSchema = z.object({
     id: z.boolean().optional(),
     name: z.boolean().optional(),
+    slug: z.boolean().optional(),
     logo: z.boolean().optional(),
     siteUrl: z.boolean().optional(),
     description: z.boolean().optional(),

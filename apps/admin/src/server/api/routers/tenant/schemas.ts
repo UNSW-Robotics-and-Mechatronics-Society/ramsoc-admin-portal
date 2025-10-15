@@ -48,9 +48,13 @@ export const TenantCreateInputSchema = z.object({
   siteUrl: z.url().nullable().describe("Site URL of the tenant").optional(),
 });
 
+export type TenantCreateInput = z.infer<typeof TenantCreateInputSchema>;
+
 export const TenantUpdateInputSchema = z.object({
   name: z.string().min(1).optional(),
   description: z.string().nullable().optional(),
   logo: z.url().nullable().optional(),
   siteUrl: z.url().nullable().optional(),
 });
+
+export type TenantUpdateInput = z.infer<typeof TenantUpdateInputSchema>;

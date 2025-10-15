@@ -6,6 +6,7 @@ export const TenantFindManyResultSchema = z.object({
   data: z.array(z.object({
   id: z.string(),
   name: z.string(),
+  slug: z.string(),
   logo: z.string().optional(),
   siteUrl: z.string().optional(),
   description: z.string().optional(),

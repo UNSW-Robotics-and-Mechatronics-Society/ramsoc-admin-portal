@@ -11,6 +11,8 @@ export const ActivityInputSchema = z.object({
     eventId: z.string(),
     title: z.string(),
     description: z.string().optional().nullable(),
+    slug: z.string(),
+    coverImageUrl: z.string().optional().nullable(),
     visibility: VisibilitySchema,
     createDate: z.date(),
     updateDate: z.date(),

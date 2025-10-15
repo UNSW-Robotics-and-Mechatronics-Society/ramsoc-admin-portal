@@ -1,6 +1,7 @@
 model Tenant {
     id          String  @id @default(cuid())
-    name        String  @unique
+    name        String
+    slug        String  @unique
     logo        String? @default("") // URL to logo image
     siteUrl     String? @default("") // URL to tenant's main website
     description String?

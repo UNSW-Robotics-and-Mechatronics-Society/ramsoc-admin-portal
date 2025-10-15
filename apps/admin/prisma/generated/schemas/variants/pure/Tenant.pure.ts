@@ -7,6 +7,7 @@ import * as z from 'zod';
 export const TenantModelSchema = z.object({
     id: z.string(),
     name: z.string(),
+    slug: z.string(),
     logo: z.string().nullable(),
     siteUrl: z.string().nullable(),
     description: z.string().nullable(),

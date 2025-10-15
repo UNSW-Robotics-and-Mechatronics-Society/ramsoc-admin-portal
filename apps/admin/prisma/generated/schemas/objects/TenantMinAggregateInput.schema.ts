@@ -8,6 +8,7 @@ import type { Prisma } from '@prisma/client';
 const makeSchema = () => z.object({
   id: z.literal(true).optional(),
   name: z.literal(true).optional(),
+  slug: z.literal(true).optional(),
   logo: z.literal(true).optional(),
   siteUrl: z.literal(true).optional(),
   description: z.literal(true).optional(),

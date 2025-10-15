@@ -12,6 +12,8 @@ const makeSchema = () => z.object({
   tenantId: z.string(),
   title: z.string(),
   description: z.string().optional().nullable(),
+  slug: z.string(),
+  coverImageUrl: z.string().optional().nullable(),
   visibility: VisibilitySchema.optional(),
   createDate: z.coerce.date().optional(),
   updateDate: z.coerce.date().optional(),

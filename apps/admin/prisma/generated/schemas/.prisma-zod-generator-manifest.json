@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "generatorVersion": "unknown",
-  "generatedAt": "2025-10-14T15:20:45.208Z",
+  "generatedAt": "2025-10-15T02:03:53.798Z",
   "outputPath": "/Users/alanchoi/dev/ramsoc/ramsoc-platform/apps/admin/prisma/generated/schemas",
   "files": [
     "enums/TransactionIsolationLevel.schema.ts",

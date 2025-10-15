@@ -3,6 +3,6 @@
 
 import * as z from 'zod';
 
-export const ActivityScalarFieldEnumSchema = z.enum(['id', 'tenantId', 'eventId', 'title', 'description', 'visibility', 'createDate', 'updateDate', 'createdById', 'updatedById'])
+export const ActivityScalarFieldEnumSchema = z.enum(['id', 'tenantId', 'eventId', 'title', 'description', 'slug', 'coverImageUrl', 'visibility', 'createDate', 'updateDate', 'createdById', 'updatedById'])
 
 export type ActivityScalarFieldEnum = z.infer<typeof ActivityScalarFieldEnumSchema>;

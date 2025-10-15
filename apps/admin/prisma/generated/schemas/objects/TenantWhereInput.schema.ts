@@ -18,6 +18,7 @@ const tenantwhereinputSchema = z.object({
   NOT: z.union([z.lazy(() => TenantWhereInputObjectSchema), z.lazy(() => TenantWhereInputObjectSchema).array()]).optional(),
   id: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   name: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
+  slug: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   logo: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
   siteUrl: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
   description: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),

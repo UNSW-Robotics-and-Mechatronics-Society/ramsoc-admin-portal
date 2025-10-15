@@ -11,6 +11,8 @@ const makeSchema = () => z.object({
   eventId: z.literal(true).optional(),
   title: z.literal(true).optional(),
   description: z.literal(true).optional(),
+  slug: z.literal(true).optional(),
+  coverImageUrl: z.literal(true).optional(),
   visibility: z.literal(true).optional(),
   createDate: z.literal(true).optional(),
   updateDate: z.literal(true).optional(),

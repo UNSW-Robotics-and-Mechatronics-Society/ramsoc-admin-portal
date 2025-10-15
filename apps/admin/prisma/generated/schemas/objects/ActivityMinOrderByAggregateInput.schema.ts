@@ -11,6 +11,8 @@ const makeSchema = () => z.object({
   eventId: SortOrderSchema.optional(),
   title: SortOrderSchema.optional(),
   description: SortOrderSchema.optional(),
+  slug: SortOrderSchema.optional(),
+  coverImageUrl: SortOrderSchema.optional(),
   visibility: SortOrderSchema.optional(),
   createDate: SortOrderSchema.optional(),
   updateDate: SortOrderSchema.optional(),

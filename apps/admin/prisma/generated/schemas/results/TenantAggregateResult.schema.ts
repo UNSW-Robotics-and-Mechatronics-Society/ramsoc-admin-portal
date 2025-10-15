@@ -5,6 +5,7 @@ import * as z from 'zod';
 export const TenantAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
     name: z.number(),
+    slug: z.number(),
     logo: z.number(),
     siteUrl: z.number(),
     description: z.number(),
@@ -19,6 +20,7 @@ export const TenantAggregateResultSchema = z.object({  _count: z.object({
   _min: z.object({
     id: z.string().nullable(),
     name: z.string().nullable(),
+    slug: z.string().nullable(),
     logo: z.string().nullable(),
     siteUrl: z.string().nullable(),
     description: z.string().nullable(),
@@ -28,6 +30,7 @@ export const TenantAggregateResultSchema = z.object({  _count: z.object({
   _max: z.object({
     id: z.string().nullable(),
     name: z.string().nullable(),
+    slug: z.string().nullable(),
     logo: z.string().nullable(),
     siteUrl: z.string().nullable(),
     description: z.string().nullable(),

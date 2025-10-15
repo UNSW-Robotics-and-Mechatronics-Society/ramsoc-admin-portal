@@ -7,10 +7,10 @@ import type { Prisma } from '@prisma/client';
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
-  name: z.string().optional()
+  slug: z.string().optional()
 }).strict().superRefine((obj, ctx) => {
         const presentTop = (k: string) => (obj as any)[k] != null;
-        const singles: string[] = ["id","name"] as string[];
+        const singles: string[] = ["id","slug"] as string[];
         const groups: string[][] = [] as string[][];
 
         const anySingle = Array.isArray(singles) && singles.length > 0 ? singles.some(presentTop) : false;

@@ -41,6 +41,8 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
   };
 };
 
+export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
+
 /**
  * Set the current user context for RLS
  */
@@ -172,6 +174,8 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
 
+export type PublicProcedureContext = TRPCContext;
+
 /**
  * Protected (authenticated) procedure
  *
@@ -193,6 +197,12 @@ export const protectedProcedure = t.procedure
       },
     });
   });
+
+export type ProtectedProcedureContext = TRPCContext & {
+  session: NonNullable<TRPCContext["session"]> & {
+    user: NonNullable<NonNullable<TRPCContext["session"]>["user"]>;
+  };
+};
 
 /**
  * Tenant-aware procedure
@@ -231,6 +241,10 @@ export const tenantProcedure = protectedProcedure
     });
   });
 
+export type TenantProcedureContext = ProtectedProcedureContext & {
+  tenantId: string;
+};
+
 /**
  * Admin procedure factory
  *
@@ -257,6 +271,8 @@ export const tenantAdminProcedure = tenantProcedure.use(
   }
 );
 
+export type TenantAdminProcedureContext = TenantProcedureContext;
+
 /**
  * Permission-based procedure factory
  *
@@ -275,3 +291,12 @@ export const createPermissionProcedure = (permissions: Permission[]) =>
       },
     });
   });
+
+export type PermissionProcedureContext = TenantProcedureContext;
+
+export type AnyProcedureContext =
+  | PublicProcedureContext
+  | ProtectedProcedureContext
+  | TenantProcedureContext
+  | TenantAdminProcedureContext
+  | PermissionProcedureContext;

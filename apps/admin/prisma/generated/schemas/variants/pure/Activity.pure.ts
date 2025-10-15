@@ -11,6 +11,8 @@ export const ActivityModelSchema = z.object({
     eventId: z.string(),
     title: z.string(),
     description: z.string().nullable(),
+    slug: z.string(),
+    coverImageUrl: z.string().nullable(),
     visibility: VisibilitySchema,
     createDate: z.date(),
     updateDate: z.date(),

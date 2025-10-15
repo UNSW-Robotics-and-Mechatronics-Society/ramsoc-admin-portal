@@ -5,6 +5,7 @@ import * as z from 'zod';
 export const TenantCreateResultSchema = z.object({
   id: z.string(),
   name: z.string(),
+  slug: z.string(),
   logo: z.string().optional(),
   siteUrl: z.string().optional(),
   description: z.string().optional(),
