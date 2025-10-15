@@ -195,7 +195,7 @@ export const protectedProcedure = t.procedure
   });
 
 /**
- * Tenant-aware procedure factory
+ * Tenant-aware procedure
  *
  * Creates procedures that require a tenantId and validate tenant access.
  */
@@ -236,13 +236,8 @@ export const tenantProcedure = protectedProcedure
  *
  * Creates procedures that require admin role in a specific tenant.
  */
-export const tenantAdminProcedure = protectedProcedure
-  .input(
-    z.object({
-      tenantId: z.cuid(),
-    })
-  )
-  .use(async ({ ctx, next, input }) => {
+export const tenantAdminProcedure = tenantProcedure.use(
+  async ({ ctx, next, input }) => {
     const tenantId = input?.tenantId;
     if (!tenantId || typeof tenantId !== "string") {
       throw new TRPCError({
@@ -259,36 +254,24 @@ export const tenantAdminProcedure = protectedProcedure
         tenantId,
       },
     });
-  });
+  }
+);
 
 /**
  * Permission-based procedure factory
  *
  * Creates procedures that require specific permissions in a tenant.
  */
-export const createPermissionProcedure = (permissions: Permission[]) => {
-  return protectedProcedure
-    .input(
-      z.object({
-        tenantId: z.cuid(),
-      })
-    )
-    .use(async ({ ctx, next, input }) => {
-      const tenantId = input?.tenantId;
-      if (!tenantId || typeof tenantId !== "string") {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "tenantId is required",
-        });
-      }
+export const createPermissionProcedure = (permissions: Permission[]) =>
+  tenantProcedure.use(async ({ ctx, next, input }) => {
+    const tenantId = input?.tenantId;
 
-      await ctx.auth.requirePermissions(tenantId, permissions);
+    await ctx.auth.requirePermissions(tenantId, permissions);
 
-      return next({
-        ctx: {
-          ...ctx,
-          tenantId,
-        },
-      });
+    return next({
+      ctx: {
+        ...ctx,
+        tenantId,
+      },
     });
-};
+  });
