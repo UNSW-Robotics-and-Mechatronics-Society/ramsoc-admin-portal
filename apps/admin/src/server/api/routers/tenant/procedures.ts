@@ -1,4 +1,5 @@
 import { createProcedure, tenantIdSchema } from "@/server/api/trpc";
+import { Permission } from "@/server/auth/permissions";
 import { TenantMemberType, type Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { formatSlug } from "utils/core";
@@ -30,6 +31,7 @@ export const listTenantProcedure = createProcedure({
 export const getTenantProcedure = createProcedure({
   auth: true,
   tenant: true,
+  permissions: [Permission.TENANT_READ],
 })
   .meta({
     openapi: {
@@ -132,6 +134,7 @@ export const updateTenantProcedure = createProcedure({
   auth: true,
   tenant: true,
   admin: true,
+  permissions: [Permission.TENANT_UPDATE],
 })
   .meta({
     openapi: {
@@ -176,6 +179,7 @@ export const deleteTenantProcedure = createProcedure({
   auth: true,
   tenant: true,
   admin: true,
+  permissions: [Permission.TENANT_DELETE],
 })
   .meta({
     openapi: {
