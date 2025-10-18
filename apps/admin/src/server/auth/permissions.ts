@@ -4,21 +4,9 @@ import { TRPCError } from "@trpc/server";
 import type { Session } from "next-auth";
 
 export enum Permission {
-  EVENT_CREATE = "event:create",
-  EVENT_READ = "event:read",
-  EVENT_UPDATE = "event:update",
-  EVENT_DELETE = "event:delete",
-  ACTIVITY_CREATE = "activity:create",
-  ACTIVITY_READ = "activity:read",
-  ACTIVITY_UPDATE = "activity:update",
-  ACTIVITY_DELETE = "activity:delete",
-  MEMBER_READ = "member:read",
+  TENANT_READ = "tenant:read",
   TENANT_UPDATE = "tenant:update",
   TENANT_DELETE = "tenant:delete",
-  CHECKIN_SELF = "checkin:self",
-  CHECKIN_OTHERS = "checkin:others",
-  CHECKIN_VIEW = "checkin:view",
-  CHECKIN_MANAGE = "checkin:manage",
   // Add more permissions as needed
 }
 
@@ -27,17 +15,8 @@ const MEMBER_TYPE_PERMISSIONS: Record<TenantMemberType, Permission[]> = {
     // Admins get all permissions
     ...Object.values(Permission),
   ],
-  MEMBER: [
-    Permission.EVENT_READ,
-    Permission.ACTIVITY_READ,
-    Permission.MEMBER_READ,
-    Permission.CHECKIN_SELF,
-    Permission.CHECKIN_VIEW,
-  ],
-  MACHINE: [
-    Permission.CHECKIN_OTHERS, // For automated systems
-    Permission.CHECKIN_MANAGE,
-  ],
+  MEMBER: [],
+  MACHINE: [],
 };
 
 export class AuthorizationService {

@@ -1,8 +1,5 @@
-import {
-  protectedProcedure,
-  tenantAdminProcedure,
-  tenantProcedure,
-} from "@/server/api/trpc";
+import { createProcedure, tenantIdSchema } from "@/server/api/trpc";
+import { Permission } from "@/server/auth/permissions";
 import { TenantMemberType, type Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { formatSlug } from "utils/core";
@@ -14,7 +11,9 @@ import {
   TenantUpdateInputSchema,
 } from "./schemas";
 
-export const listTenantProcedure = protectedProcedure
+export const listTenantProcedure = createProcedure({
+  auth: true,
+})
   .meta({
     openapi: {
       method: "GET",
@@ -29,7 +28,11 @@ export const listTenantProcedure = protectedProcedure
   .output(z.array(TenantSchema))
   .query(async ({ ctx }) => ctx.db.tenant.findMany());
 
-export const getTenantProcedure = tenantProcedure
+export const getTenantProcedure = createProcedure({
+  auth: true,
+  tenant: true,
+  permissions: [Permission.TENANT_READ],
+})
   .meta({
     openapi: {
       method: "GET",
@@ -41,11 +44,7 @@ export const getTenantProcedure = tenantProcedure
         "Get detailed information about a specific tenant (requires membership)",
     },
   })
-  .input(
-    z.object({
-      tenantId: z.cuid(),
-    })
-  )
+  .input(tenantIdSchema)
   .output(TenantDetailsSchema.nullable())
   .query(async ({ ctx, input }) => {
     return ctx.db.tenant.findUnique({
@@ -63,16 +62,13 @@ export const getTenantProcedure = tenantProcedure
             },
           },
         },
-        _count: {
-          select: {
-            events: true,
-          },
-        },
       },
     });
   });
 
-export const createTenantProcedure = protectedProcedure
+export const createTenantProcedure = createProcedure({
+  auth: true,
+})
   .meta({
     openapi: {
       method: "POST",
@@ -128,18 +124,18 @@ export const createTenantProcedure = protectedProcedure
             },
           },
         },
-        _count: {
-          select: {
-            events: true,
-          },
-        },
       },
     });
 
     return tenant;
   });
 
-export const updateTenantProcedure = tenantAdminProcedure
+export const updateTenantProcedure = createProcedure({
+  auth: true,
+  tenant: true,
+  admin: true,
+  permissions: [Permission.TENANT_UPDATE],
+})
   .meta({
     openapi: {
       method: "PUT",
@@ -151,175 +147,40 @@ export const updateTenantProcedure = tenantAdminProcedure
     },
   })
   .input(TenantUpdateInputSchema)
-  .output(TenantDetailsSchema)
+  .output(TenantSchema)
   .mutation(async ({ ctx, input }) => {
     const { tenantId, ...updateData } = input;
 
-    // First verify the tenant exists and user has access
-    const existingTenant = await ctx.db.tenant.findUnique({
-      where: { id: tenantId },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        description: true,
-        logo: true,
-        siteUrl: true,
-      },
-    });
+    const payload: Prisma.TenantUpdateInput = {
+      ...updateData,
+      ...(updateData.name && { slug: formatSlug(updateData.name) }),
+    };
 
-    if (!existingTenant) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Tenant not found",
-      });
-    }
-
-    // Prepare update data with proper validation
-    const finalUpdateData: Prisma.TenantUpdateInput = {};
-
-    // Handle name update with conflict checking and slug generation
-    if (updateData.name && updateData.name !== existingTenant.name) {
-      // Check for name conflicts
-      const nameConflict = await ctx.db.tenant.findFirst({
-        where: {
-          name: updateData.name,
-          id: { not: tenantId },
-        },
-        select: { id: true },
-      });
-
-      if (nameConflict) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "A tenant with this name already exists",
-        });
-      }
-
-      const newSlug = formatSlug(updateData.name);
-
-      // Check for slug conflicts (in case slug generation creates duplicates)
-      const slugConflict = await ctx.db.tenant.findFirst({
-        where: {
-          slug: newSlug,
-          id: { not: tenantId },
-        },
-        select: { id: true },
-      });
-
-      if (slugConflict) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "Generated slug conflicts with existing tenant",
-        });
-      }
-
-      finalUpdateData.name = updateData.name;
-      finalUpdateData.slug = newSlug;
-    }
-
-    // Handle other fields - only include if they're actually changing
-    if (
-      updateData.description !== undefined &&
-      updateData.description !== existingTenant.description
-    ) {
-      finalUpdateData.description = updateData.description;
-    }
-
-    if (
-      updateData.logo !== undefined &&
-      updateData.logo !== existingTenant.logo
-    ) {
-      finalUpdateData.logo = updateData.logo;
-    }
-
-    if (
-      updateData.siteUrl !== undefined &&
-      updateData.siteUrl !== existingTenant.siteUrl
-    ) {
-      // Validate URL format if provided
-      if (updateData.siteUrl && updateData.siteUrl.trim()) {
-        try {
-          new URL(updateData.siteUrl);
-        } catch {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "Invalid site URL format",
-          });
-        }
-      }
-      finalUpdateData.siteUrl = updateData.siteUrl;
-    }
-
-    // If no changes were made, return the existing tenant
-    if (Object.keys(finalUpdateData).length === 0) {
-      return ctx.db.tenant.findUniqueOrThrow({
-        where: { id: tenantId },
-        include: {
-          tenantMembers: {
-            where: { isActive: true },
-            include: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  email: true,
-                },
-              },
-            },
-          },
-          _count: {
-            select: {
-              events: true,
-            },
-          },
-        },
-      });
-    }
-
-    // Perform the update with optimistic concurrency control
     try {
-      const updatedTenant = await ctx.db.tenant.update({
+      return await ctx.db.tenant.update({
         where: { id: tenantId },
-        data: finalUpdateData,
-        include: {
-          tenantMembers: {
-            where: { isActive: true },
-            include: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  email: true,
-                },
-              },
-            },
-          },
-          _count: {
-            select: {
-              events: true,
-            },
-          },
-        },
+        data: payload,
       });
-
-      return updatedTenant;
     } catch (error) {
-      // Handle potential race conditions or constraint violations
       if (
         error instanceof Error &&
         error.message.includes("Unique constraint")
       ) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Update failed due to conflicting data. Please try again.",
+          message: "Name already exists",
         });
       }
       throw error;
     }
   });
 
-export const deleteTenantProcedure = tenantAdminProcedure
+export const deleteTenantProcedure = createProcedure({
+  auth: true,
+  tenant: true,
+  admin: true,
+  permissions: [Permission.TENANT_DELETE],
+})
   .meta({
     openapi: {
       method: "DELETE",
@@ -330,17 +191,8 @@ export const deleteTenantProcedure = tenantAdminProcedure
       description: "Delete a tenant organization (requires admin role)",
     },
   })
-  .input(
-    z.object({
-      tenantId: z.cuid(),
-    })
-  )
-  .output(
-    z.object({
-      success: z.boolean(),
-      message: z.string(),
-    })
-  )
+  .input(tenantIdSchema)
+  .output(z.void())
   .mutation(async ({ ctx, input }) => {
     // Check if tenant has any events (you might want to prevent deletion)
     const eventCount = await ctx.db.event.count({
@@ -358,9 +210,4 @@ export const deleteTenantProcedure = tenantAdminProcedure
     await ctx.db.tenant.delete({
       where: { id: input.tenantId },
     });
-
-    return {
-      success: true,
-      message: "Tenant deleted successfully",
-    };
   });
