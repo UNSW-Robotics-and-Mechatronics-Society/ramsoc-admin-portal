@@ -1,10 +1,7 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "@/server/api/trpc";
+import { protectedProcedure, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter } from "../trpc";
 
 export const testRouter = createTRPCRouter({
   // Simplest possible procedure to test
