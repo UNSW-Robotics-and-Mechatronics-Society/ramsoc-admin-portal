@@ -60,11 +60,6 @@ export const getTenantProcedure = createProcedure({
             },
           },
         },
-        _count: {
-          select: {
-            events: true,
-          },
-        },
       },
     });
   });
