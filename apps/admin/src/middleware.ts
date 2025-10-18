@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const API_HOST_PREFIX = "api.";
 const API_WHITELIST = [
   /^\/api(\/|$)/, // all Next.js API routes (including /api/trpc, /api/auth, etc.)
   /^\/openapi\.json$/, // if you expose OpenAPI
@@ -8,14 +7,7 @@ const API_WHITELIST = [
 ];
 
 export function middleware(req: NextRequest) {
-  const { pathname, hostname } = req.nextUrl;
-
-  const isApiHost = hostname.startsWith(API_HOST_PREFIX);
-
-  if (!isApiHost) {
-    // admin.* — show everything
-    return NextResponse.next();
-  }
+  const { pathname } = req.nextUrl;
 
   // api.* — allow only API paths / docs
   const allowed = API_WHITELIST.some((re) => re.test(pathname));
