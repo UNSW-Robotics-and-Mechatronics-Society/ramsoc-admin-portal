@@ -7,7 +7,14 @@ const API_WHITELIST = [
 ];
 
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const { pathname, hostname } = req.nextUrl;
+
+  const isApiHost = hostname.startsWith(API_HOST_PREFIX);
+
+  if (!isApiHost) {
+    // admin.* — show everything
+    return NextResponse.next();
+  }
 
   // api.* — allow only API paths / docs
   const allowed = API_WHITELIST.some((re) => re.test(pathname));
